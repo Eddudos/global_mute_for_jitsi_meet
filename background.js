@@ -1,70 +1,46 @@
 chrome.commands.onCommand.addListener(async (command) => {
-    try {
-        if (command === "toggle-mic") {
-            await toggleMicrophone();
-        } else if (command === "switch-to-meet") {
-            await switchToMeetTab();
-        } else if (command === "go-to-meet-home") {
-            goToMeetHome();
+    if (command === "toggle-mic") {
+        try {
+            // You can add hosts here:
+            let tabs = await chrome.tabs.query({ url: ["https://meet.jit.si/*"]});
+            if (!tabs.length) {
+                console.warn("No active Jitsi tab found.");
+                return;
+            }
+
+            let tabId = tabs[0].id;
+
+            await chrome.scripting.executeScript({
+                target: { tabId },
+                func: toggleMicJitsi
+            });
+        } catch (e) {
+            console.error("Error:", e);
         }
-    } catch (error) {
-        console.error("Error handling command:", error);
     }
 });
 
-async function toggleMicrophone() {
+function toggleMicJitsi() {
     try {
-        let tabs = await chrome.tabs.query({ url: "https://meet.google.com/*" });
-        if (!tabs || tabs.length === 0) {
-            console.warn("No active Google Meet tab found.");
+        if (window.APP?.conference?.isLocalAudioMuted) {
+            const muted = window.APP.conference.isLocalAudioMuted();
+            window.APP.conference.muteAudio(!muted);
+            console.log("Jitsi mic toggled:", !muted);
             return;
         }
 
-        let tabId = tabs[0].id;
-        if (!tabId) {
-            console.error("Invalid tabId:", tabId);
-            return;
-        }
+        let btn =
+            document.querySelector('[aria-label*="microphone"]') ||
+            document.querySelector('[data-testid="toggle-audio"]') ||
+            document.querySelector('button[aria-label*="Mute"]') ||
+            document.querySelector('button[aria-label*="Unmute"]');
 
-        await chrome.scripting.executeScript({
-            target: { tabId },
-            func: toggleMic
-        });
-
-    } catch (error) {
-        console.error("Error toggling mic:", error);
-    }
-}
-
-async function switchToMeetTab() {
-    try {
-        let tabs = await chrome.tabs.query({ url: "https://meet.google.com/*" });
-        if (tabs.length > 0) {
-            chrome.tabs.update(tabs[0].id, { active: true });
+        if (btn) {
+            btn.click();
         } else {
-            console.warn("No active Google Meet tab to switch to.");
+            console.warn("Jitsi mic button not found.");
         }
-    } catch (error) {
-        console.error("Error switching to Meet tab:", error);
-    }
-}
-
-function goToMeetHome() {
-    chrome.tabs.create({ url: "https://meet.google.com" }).catch((error) => {
-        console.error("Error navigating to Meet home:", error);
-    });
-}
-
-function toggleMic() {
-    try {
-        let micButton = document.querySelector('[aria-label="Turn off microphone"]') ||
-            document.querySelector('[aria-label="Turn on microphone"]');
-        if (micButton) {
-            micButton.click();
-        } else {
-            console.warn("Microphone button not found.");
-        }
-    } catch (error) {
-        console.error("Error executing script in Meet tab:", error);
+    } catch (e) {
+        console.error("toggleMicJitsi failed:", e);
     }
 }

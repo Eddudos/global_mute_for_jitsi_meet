@@ -4,7 +4,7 @@
 
 - No data is sent to any server.
 - The extension runs entirely in your browser.
-- It only interacts with open tabs that match the domain `https://meet.google.com/*`.
+- It only interacts with open tabs that match the domain `https://meet.jit.si/*`.
 - Its sole purpose is to allow you to mute/unmute your microphone on Google Meet using keyboard shortcuts.
 
 We do **not**:
@@ -15,4 +15,4 @@ We do **not**:
 
 This policy will be updated if data collection is ever introduced (which we currently have no plans to do).
 
-_Last updated: June 29, 2025_
+_Last updated: December 07, 2025_
