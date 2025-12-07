@@ -1,46 +1,62 @@
 chrome.commands.onCommand.addListener(async (command) => {
     if (command === "toggle-mic") {
         try {
-            // You can add hosts here:
-            let tabs = await chrome.tabs.query({ url: ["https://meet.jit.si/*"]});
+            // You can add your Jitsi hosts here
+            let tabs = await chrome.tabs.query({
+                url: [
+                    "https://meet.jit.si/*", 
+                    "https://app.element.io/*"
+                ]
+            });
+
             if (!tabs.length) {
-                console.warn("No active Jitsi tab found.");
+                console.warn("No active conference tab found.");
                 return;
             }
 
             let tabId = tabs[0].id;
 
             await chrome.scripting.executeScript({
-                target: { tabId },
-                func: toggleMicJitsi
+                target: { 
+                    tabId: tabId, 
+                    allFrames: true
+                },
+                func: toggleMicJitsi,
+                world: "MAIN"
             });
         } catch (e) {
-            console.error("Error:", e);
+            console.error("Error executing script:", e);
         }
     }
 });
 
 function toggleMicJitsi() {
     try {
-        if (window.APP?.conference?.isLocalAudioMuted) {
-            const muted = window.APP.conference.isLocalAudioMuted();
+        if (window.APP?.conference) {
+            let muted = false;
+            if (typeof window.APP.conference.isLocalAudioMuted === 'function') {
+                muted = window.APP.conference.isLocalAudioMuted();
+            } else {
+                console.log("isLocalAudioMuted is not a function, trying blind toggle");
+            }
+            
             window.APP.conference.muteAudio(!muted);
-            console.log("Jitsi mic toggled:", !muted);
+            console.log(`[Extension] Jitsi API found in frame: ${window.location.href}. Toggled to: ${!muted}`);
             return;
         }
 
         let btn =
-            document.querySelector('[aria-label*="microphone"]') ||
-            document.querySelector('[data-testid="toggle-audio"]') ||
-            document.querySelector('button[aria-label*="Mute"]') ||
-            document.querySelector('button[aria-label*="Unmute"]');
+            document.querySelector('[aria-label="Toggle mute"]') ||
+            document.querySelector('[data-testid="audio-mute"]') ||
+            document.querySelector('.audio-preview-microphone') || 
+            document.querySelector('[id="mic-enable"]');
 
         if (btn) {
             btn.click();
-        } else {
-            console.warn("Jitsi mic button not found.");
-        }
+            console.log(`[Extension] Button clicked in frame: ${window.location.href}`);
+        } 
+
     } catch (e) {
-        console.error("toggleMicJitsi failed:", e);
+        console.error("toggleMicJitsi failed inside frame:", e);
     }
 }
