@@ -1,6 +1,6 @@
-# 🔇 Global Mute for Google Meet
+# 🔇 Global Mute for Jitsi
 
-A lightweight Chrome extension to globally mute or unmute your microphone on Google Meet — even when you're outside of Chrome.
+A lightweight Chrome extension to globally mute or unmute your microphone on Jitsi — even when you're outside of Chrome.
 
 Built using Manifest V3 with clean code and customizable hotkeys.
 
@@ -8,9 +8,9 @@ Built using Manifest V3 with clean code and customizable hotkeys.
 
 ## 🚀 Features
 
-- 🎤 **Toggle Mic** on Google Meet with `Ctrl + Shift + Z`
-- 🔄 **Switch to active Meet tab** with `Ctrl + Shift + M`
-- 🏠 **Navigate to Meet home** (`https://meet.google.com`) with `Ctrl + Shift + G`
+- 🎤 **Toggle Mic** on Jitsi with `Ctrl + Shift + Z`
+- 🔄 **Switch to active Jitsi tab** with `Ctrl + Shift + M`
+- 🏠 **Navigate to Jitsi home** (`https://meet.jitsi`) with `Ctrl + Shift + G`
 - 🌐 Works globally — even when Chrome is not in focus
 - ⚙️ Hotkeys are configurable via `chrome://extensions/shortcuts`
 
@@ -19,8 +19,8 @@ Built using Manifest V3 with clean code and customizable hotkeys.
 ## 💻 How to Use
 
 1. Install the extension (download or clone this repo, then load it as unpacked — see below).
-2. Join or open a Google Meet call.
-3. Use the configured hotkeys to control the mic or navigate between Meet tabs.
+2. Join or open a Jitsi call.
+3. Use the configured hotkeys to control the mic or navigate between Jitsi tabs.
 
 ---
 
@@ -29,12 +29,12 @@ Built using Manifest V3 with clean code and customizable hotkeys.
 1. Open Chrome and visit:  
    [`chrome://extensions/shortcuts`](chrome://extensions/shortcuts)
 
-2. Find **Global Mute for Google Meet**
+2. Find **Global Mute for Jitsi**
 
 3. Set the shortcuts:
-   - **Toggle microphone in Google Meet** → `Ctrl + Shift + Z`
-   - **Switch to active Google Meet tab** → `Ctrl + Shift + M`
-   - **Navigate to Google Meet home screen** → `Ctrl + Shift + G`
+   - **Toggle microphone in Jitsi** → `Ctrl + Shift + Z`
+   - **Switch to active Jitsi tab** → `Ctrl + Shift + M`
+   - **Navigate to Jitsi home screen** → `Ctrl + Shift + G`
 
 4. Change the dropdown on the right from `In Chrome` to `Global`.
 
@@ -55,7 +55,7 @@ Built using Manifest V3 with clean code and customizable hotkeys.
 ---
 
 ## 📁 Folder Structure
-<pre>MuteForMeetMV3/
+<pre>MuteForJitsiMV3/
 ├── manifest.json
 ├── background.js
 ├── content.js
@@ -93,5 +93,4 @@ Apache-2.0 license. Free to use and modify.
 
 ## 🙌 Credits
 
-Built by zegulas — feel free to contribute or report issues!
-
+Built by zegulas and modified by Eddudos — feel free to contribute or report issues!
